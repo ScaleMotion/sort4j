@@ -1,0 +1,18 @@
+= Introduction =
+
+This document describes various aspects of sort4j usage
+
+= Getting sort4j =
+
+There's two ways to get sort4j
+
+  * Download it from http://code.google.com/p/sort4j/downloads/list page
+  * Get sort4j from maven. Sort4j isn't a part of maven central repository, but you could use this one: http://java.iponweb.net/maven2/thirdparty/
+
+= Defining sort4j task =
+
+For creating sort4j task use sort4j.SortingTask class. It implements builder interface. Also you could user SortingTask.textFormat() that creates a skeleton for task which sort text files
+
+= Sorting =
+
+Just create an instance of sort4j.Sorter class and call sort() method. Currently, only ne implementation is available: sort4j.MergeSorter
