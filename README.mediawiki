@@ -22,7 +22,7 @@ and use it as dependency
         </dependency>
 ==Usage==
 
-The interface is rather straitforward:
+The interface is quite straitforward:
 
 * Create an instance of SortingTask
 * By calling SortingTask.inputFile(...), SortingTask.outputFile(...), SortingTask.inputFormat(...), SortingTask.outputFormat(...), SortingTask.memoryCalculator(...)
