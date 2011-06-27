@@ -30,7 +30,7 @@ define the location and format of output data. Consult SortingTask class javadoc
 * new MergeSorter(...).sort(sortingTask) for sorting. See MergeSorter javadoc for MergeSorter settings and constructor parameters.
 
 
-Example
+==Example==
 
         SortingTask<String> task = new SortingTask<String>()
                 .inputFile("input.txt")
@@ -44,3 +44,4 @@ Example
                                .sort(task);
 
 
+.
