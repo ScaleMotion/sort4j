@@ -38,7 +38,9 @@ Example
                 .inputFormat(new TextInputFormat())
                 .outputFormat(new TextOutputFormat())
                 .memoryCalculator(new StringMemoryCalculator());
-        new MergeSorter<String>(tmp.getAbsolutePath(), 2 /* number of working threads */, 20 /* maximum RAM chunk size*/).sort(task);
+        new MergeSorter<String>(tmp.getAbsolutePath(), 
+                                2 /* number of working threads */, 
+                                20 /* maximum RAM chunk size*/)
+                               .sort(task);
 
 
-.
