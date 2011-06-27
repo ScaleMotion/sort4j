@@ -8,7 +8,7 @@ Hadoop backed sorting coming soon.
 ==Getting sort4j==
 
 
-* Direct jars downloads: [http://vklimontovich.github.com/maven2/sort4j/sort4j/1.0 JExpr-1.0]
+* Direct jars downloads: [http://vklimontovich.github.com/maven2/sort4j/sort4j/ sort4j] (all available versions, use latest non snapshot one from there). 
 * Plugin a maven repository to pom.xml
         <repository>
             <id>vklimontovich-github</id>
