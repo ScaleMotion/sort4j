@@ -1,18 +1,41 @@
-= Introduction =
+== About ==
 
-This document describes various aspects of sort4j usage
+sort4j is a sorting library for java. Unlike Collections.sort() and Arrays.sort() it provides ability of sorting huge amount of data
+that doesn't fit i9nto RAM. Currently, merge sort is implemented (small chunks is being sorted in memory, cached to disk and merged afterwards).
 
-= Getting sort4j =
+Hadoop backed sorting coming soon.
 
-There's two ways to get sort4j
+==Getting sort4j==
 
-  * Download it from http://code.google.com/p/sort4j/downloads/list page
-  * Get sort4j from maven. Sort4j isn't a part of maven central repository, but you could use this one: http://java.iponweb.net/maven2/thirdparty/
 
-= Defining sort4j task =
+* Direct jars downloads: [http://vklimontovich.github.com/maven2/sort4j/sort4j/1.0 JExpr-1.0]
+* Plugin a maven repository to pom.xml
+        <repository>
+            <id>vklimontovich-github</id>
+            <url>http://vklimontovich.github.com/maven2/</url>
+        </repository>
+and use it as dependency
+        <dependency>
+            <groupId>jexpr</groupId>
+            <artifactId>jexpr</artifactId>
+            <version>1.0</version>
+        </dependency>
+==Usage==
 
-For creating sort4j task use sort4j.SortingTask class. It implements builder interface. Also you could user SortingTask.textFormat() that creates a skeleton for task which sort text files
+The interface is rather straitforward:
 
-= Sorting =
+* Create an instance of SortingTask
+* By calling SortingTask.inputFile(...), SortingTask.outputFile(...), SortingTask.inputFormat(...), SortingTask.outputFormat(...), SortingTask.memoryCalculator(...)
+define the location and format of output data. Consult SortingTask class javadoc for detailed instructions
+* new MergeSorter(...).sort(sortingTask) for sorting. See MergeSorter javadoc for MergeSorter settings and constructor parameters.
 
-Just create an instance of sort4j.Sorter class and call sort() method. Currently, only ne implementation is available: sort4j.MergeSorter
+
+Example
+
+        SortingTask<String> task = new SortingTask<String>()
+                .inputFile("input.txt")
+                .outputFile("output.txt")
+                .inputFormat(new TextInputFormat())
+                .outputFormat(new TextOutputFormat())
+                .memoryCalculator(new StringMemoryCalculator());
+        new MergeSorter<String>(tmp.getAbsolutePath(), 2 /* number of working threads */, 20 /* maximum RAM chunk size*/).sort(task);

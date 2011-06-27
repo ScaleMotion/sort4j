@@ -6,11 +6,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 
-public class TextInputFormat implements DataInputFormat<String> {
+public class TextInputFormat extends TextFormat implements DataInputFormat<String> {
+    /**
+     * Default constructor
+     */
+    public TextInputFormat() {
+        super(DEFAULT_CHARSET);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public TextInputFormat(String charset) {
+        super(charset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Reader<String> initialize(InputStream in) {
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName(this.charset)));
         return new Reader<String>() {
             private String nextLine;
             private boolean nextIsCached = false;
