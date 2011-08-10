@@ -1,4 +1,4 @@
-package sort4j;
+package com.scalemotion.sort4j;
 
 import org.apache.log4j.Logger;
 

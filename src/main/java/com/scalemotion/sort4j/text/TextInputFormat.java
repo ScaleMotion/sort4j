@@ -1,13 +1,12 @@
-package sort4j.text;
+package com.scalemotion.sort4j.text;
 
-import sort4j.DataInputFormat;
+import com.scalemotion.sort4j.DataInputFormat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Iterator;
 
 public class TextInputFormat extends TextFormat implements DataInputFormat<String> {
     /**

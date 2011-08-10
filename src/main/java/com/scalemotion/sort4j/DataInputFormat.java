@@ -1,9 +1,8 @@
-package sort4j;
+package com.scalemotion.sort4j;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 
 /**
  * Defines the way for reading (deserializing) objects from byte stream

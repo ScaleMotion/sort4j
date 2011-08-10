@@ -1,6 +1,6 @@
-package sort4j.text;
+package com.scalemotion.sort4j.text;
 
-import sort4j.MemoryCalculator;
+import com.scalemotion.sort4j.MemoryCalculator;
 
 public class StringMemoryCalculator implements MemoryCalculator<String>{
     /**

@@ -1,10 +1,9 @@
-package sort4j;
+package com.scalemotion.sort4j;
 
-import sort4j.text.StringMemoryCalculator;
-import sort4j.text.TextInputFormat;
-import sort4j.text.TextOutputFormat;
+import com.scalemotion.sort4j.text.StringMemoryCalculator;
+import com.scalemotion.sort4j.text.TextInputFormat;
+import com.scalemotion.sort4j.text.TextOutputFormat;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -26,7 +25,7 @@ public class SortingTask<T> {
     /**
      * Sets memory calculator: a callback which defines the usage of memory
      * of each item (see {@link MemoryCalculator}). If you're sorting text data, use
-     * {@link sort4j.text.StringMemoryCalculator}
+     * {@link com.scalemotion.sort4j.text.StringMemoryCalculator}
      * <p>
      * Should be called (no default value)
      * @param memoryCalculator calculator
@@ -49,7 +48,7 @@ public class SortingTask<T> {
 
     /**
      * Format of input data (see {@link DataInputFormat}). If you're soring
-     * text files use {@link sort4j.text.TextInputFormat}
+     * text files use {@link com.scalemotion.sort4j.text.TextInputFormat}
      * <p>
      * Should be called (no default value)
      * @param inputFormat format
@@ -62,7 +61,7 @@ public class SortingTask<T> {
 
     /**
      * Format of output data (see {@link DataOutputFormat}). If you're soring
-     * text files use {@link sort4j.text.TextOutputFormat}
+     * text files use {@link com.scalemotion.sort4j.text.TextOutputFormat}
      * <p>
      * Should be called (no default value)
      * @param outputFormat format

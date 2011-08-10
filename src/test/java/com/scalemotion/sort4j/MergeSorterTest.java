@@ -1,10 +1,10 @@
-package sort4j;
+package com.scalemotion.sort4j;
 
 import org.junit.Assert;
 import org.junit.Test;
-import sort4j.text.StringMemoryCalculator;
-import sort4j.text.TextInputFormat;
-import sort4j.text.TextOutputFormat;
+import com.scalemotion.sort4j.text.StringMemoryCalculator;
+import com.scalemotion.sort4j.text.TextInputFormat;
+import com.scalemotion.sort4j.text.TextOutputFormat;
 
 import java.io.File;
 

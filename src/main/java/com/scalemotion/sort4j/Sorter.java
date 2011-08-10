@@ -1,4 +1,4 @@
-package sort4j;
+package com.scalemotion.sort4j;
 
 /**
  * Interface that represents sorting algorithm

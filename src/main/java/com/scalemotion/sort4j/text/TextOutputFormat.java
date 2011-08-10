@@ -1,7 +1,6 @@
-package sort4j.text;
+package com.scalemotion.sort4j.text;
 
-import sort4j.DataInputFormat;
-import sort4j.DataOutputFormat;
+import com.scalemotion.sort4j.DataOutputFormat;
 
 import java.io.IOException;
 import java.io.OutputStream;

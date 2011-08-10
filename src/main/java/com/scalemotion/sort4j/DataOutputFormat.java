@@ -1,4 +1,4 @@
-package sort4j;
+package com.scalemotion.sort4j;
 
 import java.io.Closeable;
 import java.io.IOException;

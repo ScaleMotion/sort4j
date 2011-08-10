@@ -1,4 +1,4 @@
-package sort4j.text;
+package com.scalemotion.sort4j.text;
 
 class TextFormat {
     protected static final String DEFAULT_CHARSET = "UTF-8";
