@@ -2,13 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>sort4j</groupId>
+    <groupId>com.scalemotion.sort4j</groupId>
     <artifactId>sort4j</artifactId>
     <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <scm>
-        <developerConnection>scm:git:git@github.com:vklimontovich/sort4j.git</developerConnection>
+        <developerConnection>scm:git:git://github.com/ScaleMotion/sort4j</developerConnection>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>repo</id>
+            <url>scpexe://scalemotion.com/var/maven/open/</url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>commons-lang</groupId>

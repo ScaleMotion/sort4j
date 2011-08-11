@@ -1,26 +1,30 @@
-== About ==
+# About
 
 sort4j is a sorting library for java. Unlike Collections.sort() and Arrays.sort() it provides ability of sorting huge amount of data
-that doesn't fit i9nto RAM. Currently, merge sort is implemented (small chunks is being sorted in memory, cached to disk and merged afterwards).
+that doesn't fit into RAM. Currently, merge sort is implemented (small chunks is being sorted in memory, cached to disk and merged afterwards).
 
 Hadoop backed sorting coming soon.
 
-==Getting sort4j==
+# Getting sort4j
 
 
-* Direct jars downloads: [http://vklimontovich.github.com/maven2/sort4j/sort4j/ sort4j] (all available versions, use latest non snapshot one from there). 
+* Direct jars downloads: [sort4j](http://vklimontovich.github.com/maven2/sort4j/sort4j/) (all available versions, use latest non snapshot one from there).
 * Plugin a maven repository to pom.xml
+
         <repository>
-            <id>vklimontovich-github</id>
-            <url>http://vklimontovich.github.com/maven2/</url>
+            <id>scalemotion-open</id>
+            <url>http://maven.scalemotion.com/open/</url>
         </repository>
+
 and use it as dependency
+
         <dependency>
-            <groupId>jexpr</groupId>
-            <artifactId>jexpr</artifactId>
-            <version>1.0</version>
+            <groupId>com.scalemotion.sort4j</groupId>
+            <artifactId>sort4j</artifactId>
+            <version>1.1</version>
         </dependency>
-==Usage==
+
+# Usage
 
 The interface is quite straitforward:
 
@@ -30,7 +34,7 @@ define the location and format of output data. Consult SortingTask class javadoc
 * new MergeSorter(...).sort(sortingTask) for sorting. See MergeSorter javadoc for MergeSorter settings and constructor parameters.
 
 
-==Example==
+# Example
 
         SortingTask<String> task = new SortingTask<String>()
                 .inputFile("input.txt")
