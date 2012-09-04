@@ -44,7 +44,7 @@ define the location and format of output data. Consult SortingTask class javadoc
                 .memoryCalculator(new StringMemoryCalculator());
         new MergeSorter<String>(tmp.getAbsolutePath(), 
                                 2 /* number of working threads */, 
-                                20 /* maximum RAM chunk size*/)
+                                20000000 /* maximum RAM buffer size in bytes */)
                                .sort(task);
 
 
