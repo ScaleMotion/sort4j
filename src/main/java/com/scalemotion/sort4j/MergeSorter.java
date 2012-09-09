@@ -4,9 +4,8 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -15,10 +14,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @param <T>
  */
 public class MergeSorter<T> implements Sorter<T> {
+    private BlockingQueue<File> inputFiles = new LinkedBlockingQueue<File>();
     private static final Logger LOG = Logger.getLogger(MergeSorter.class);
     private int executionThreads;
     private int memoryBufferBytes;
     private String temporaryDirectory;
+    private AtomicBoolean hasErrors = new AtomicBoolean();
 
     /**
      * @param temporaryDirectory directory where sorter will keep temporary files
@@ -51,54 +52,77 @@ public class MergeSorter<T> implements Sorter<T> {
     public void setTemporaryDirectory(String temporaryDirectory) {
         this.temporaryDirectory = temporaryDirectory;
     }
-    public void sort(final SortingTask<T> task) {
-        new File(temporaryDirectory).mkdirs();
-        ExecutorService executorService = Executors.newFixedThreadPool(executionThreads);
-        final List<File> filesToMerge = Collections.synchronizedList(new ArrayList<File>());
+
+    private void workerMain(final SortingTask<T> task, List<File> filesToMerge) throws Exception{
         final long maxMemoryPerBuffer = memoryBufferBytes / executionThreads;
         final AtomicInteger records = new AtomicInteger();
+        List<T> buffer = new ArrayList<T>();
+        int bufferSize = 0;
+        while (!hasErrors.get()) {
+            FileInputStream s;
+            DataInputFormat.Reader<T> reader = null;
+            File f = inputFiles.poll();
+            if (f == null) {
+                break;
+            }
+            try {
+                s = new FileInputStream(f);
+                reader = task.inputFormat().initialize(s);
+                while (reader.hasNext()) {
+                    if (hasErrors.get()) {
+                        return;
+                    }
+                    final T item = reader.nextItem();
+                    records.incrementAndGet();
+                    buffer.add(item);
+                    bufferSize += task.memoryCalculator().sizeof(item);
+                    if (bufferSize >= maxMemoryPerBuffer) {
+                        final List<T> bufferToFlush = buffer;
+                        flush(bufferToFlush, task, filesToMerge);
+                        buffer = new ArrayList<T>();
+                        bufferSize = 0;
+                    }
+                }
+            } finally {
+                closeQuietly(reader);
+            }
+        }
+        if (bufferSize != 0) {
+            flush(buffer, task, filesToMerge);
+        }
+    }
+
+    public void sort(final SortingTask<T> task) {
+        new File(temporaryDirectory).mkdirs();
+        final List<File> filesToMerge = Collections.synchronizedList(new ArrayList<File>());
         for (final String f : task.inputFiles()) {
-            executorService.submit(new Runnable() {
+            inputFiles.add(new File(f));
+        }
+        LOG.debug("Added " + inputFiles.size() + " to queue. Starting " + executionThreads + " threads");
+        List<Thread> workerThreads = new ArrayList<Thread>();
+        for (int i = 0; i < executionThreads; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
                 public void run() {
-                    List<T> buffer = new ArrayList<T>();
-                    int bufferSize = 0;
-                    FileInputStream s;
-                    DataInputFormat.Reader<T> reader = null;
                     try {
-                        s = new FileInputStream(f);
-                        reader = task.inputFormat().initialize(s);
-                        while (reader.hasNext()) {
-                            final T item = reader.nextItem();
-                            records.incrementAndGet();
-                            buffer.add(item);
-                            bufferSize += task.memoryCalculator().sizeof(item);
-                            if (bufferSize >= maxMemoryPerBuffer) {
-                                final List<T> bufferToFlush = buffer;
-                                flush(bufferToFlush, task, filesToMerge);
-                                buffer = new ArrayList<T>();
-                                bufferSize = 0;
-                            }
-                        }
-                        if (bufferSize != 0) {
-                            flush(buffer, task, filesToMerge);
-                        }
+                        workerMain(task, filesToMerge);
                     } catch (Exception e) {
-                        LOG.warn("Can't read file " + f, e);
-                        throw new RuntimeException("Can't read file " + f, e);
-                    } finally {
-                        closeQuietly(reader);
+                        LOG.error("Exception during phase-1 of sorting: " + e.getMessage(), e);
+                        hasErrors.set(true);
                     }
                 }
             });
+            t.start();
+            workerThreads.add(t);
         }
-        executorService.shutdown();
-        try {
-            executorService.awaitTermination(1, TimeUnit.HOURS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e.getMessage(), e);
+        for (Thread t : workerThreads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException("Interrupted", e);
+            }
         }
         try {
-            LOG.info(records + " records was sorted (total)");
             merge(filesToMerge, task);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
